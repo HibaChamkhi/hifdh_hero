@@ -1,0 +1,61 @@
+name: hifdh_hero
+description: "Hifz Hero — رحلتك في حفظ القرآن. A gamified Quran memorization app."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.11.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+  # --- Same core stack as starterflutter-develop ---
+  dartz: ^0.10.1                       # Either / functional error handling
+  equatable: ^2.0.8                    # value equality for states/models
+  injectable: ^2.5.1                   # DI annotations
+  get_it: ^9.2.1                       # service locator
+  bloc: ^9.2.0                         # state management
+  flutter_bloc: ^9.1.1
+  http: ^1.6.0                         # networking
+  http_interceptor: ^2.0.0            # auth/token interceptor
+  internet_connection_checker: ^3.0.1  # NetworkInfo
+  shared_preferences: ^2.5.3           # local persistence
+  flutter_screenutil: ^5.9.3           # responsive sizing
+
+  # --- Added for Hifz Hero (localization/RTL) ---
+  intl: ^0.20.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  injectable_generator: ^2.7.0         # regenerates injection.config.dart
+  build_runner: ^2.4.15
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/data/
+
+  # Poppins is used for Latin text/numerals (same as the starter).
+  # NOTE: bundle an Arabic UI font (e.g. Tajawal/Cairo) and a Quran font
+  # (e.g. Amiri Quran) into assets/fonts and register them below.
+  # See README_ARCHITECTURE.md → "Fonts / Typography".
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/poppins/Poppins-Regular.ttf
+        - asset: assets/fonts/poppins/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/poppins/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/poppins/Poppins-Bold.ttf
+          weight: 700
