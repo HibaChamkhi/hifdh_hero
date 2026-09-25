@@ -30,10 +30,12 @@ class QuranBloc extends Bloc<QuranEvent, QuranState> {
       _all = await repository.getSurahs();
       emit(state.copyWith(status: UIStatus.success, data: _all));
     } on Exception catch (e) {
-      emit(state.copyWith(
-        status: UIStatus.error,
-        message: mapExceptionToMessage(e),
-      ));
+      emit(
+        state.copyWith(
+          status: UIStatus.error,
+          message: mapExceptionToMessage(e),
+        ),
+      );
     }
   }
 
@@ -45,10 +47,12 @@ class QuranBloc extends Bloc<QuranEvent, QuranState> {
     }
     final ql = q.toLowerCase();
     final filtered = _all
-        .where((s) =>
-            ArabicText.contains(s.name, q) ||
-            s.englishName.toLowerCase().contains(ql) ||
-            s.number.toString() == q)
+        .where(
+          (s) =>
+              ArabicText.contains(s.name, q) ||
+              s.englishName.toLowerCase().contains(ql) ||
+              s.number.toString() == q,
+        )
         .toList();
     emit(state.copyWith(status: UIStatus.success, data: filtered));
   }

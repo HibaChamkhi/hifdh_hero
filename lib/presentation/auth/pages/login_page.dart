@@ -51,8 +51,8 @@ class _LoginViewState extends State<_LoginView> {
   void _submit(BuildContext context) {
     if (_formKey.currentState!.validate()) {
       context.read<LoginBloc>().add(
-            LoginSubmitted(email: _email.text.trim(), password: _password.text),
-          );
+        LoginSubmitted(email: _email.text.trim(), password: _password.text),
+      );
     }
   }
 
@@ -64,11 +64,13 @@ class _LoginViewState extends State<_LoginView> {
         child: BlocConsumer<LoginBloc, LoginState>(
           listener: (context, state) {
             if (state.status == UIStatus.success) {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                  AppRoutes.home, (r) => false);
+              Navigator.of(
+                context,
+              ).pushNamedAndRemoveUntil(AppRoutes.home, (r) => false);
             } else if (state.status == UIStatus.error) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(state.message)));
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.message)));
             }
           },
           builder: (context, state) {
@@ -80,10 +82,7 @@ class _LoginViewState extends State<_LoginView> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     SizedBox(height: AppDimens.lg.h),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: AuthLogo(),
-                    ),
+                    const AuthLogo(),
                     SizedBox(height: AppDimens.xl.h),
                     const PageHeader(
                       title: AppStrings.welcomeBack,
@@ -108,12 +107,16 @@ class _LoginViewState extends State<_LoginView> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: GestureDetector(
-                        onTap: () => Navigator.of(context)
-                            .pushNamed(AppRoutes.forgotPassword),
-                        child: Text(AppStrings.forgotPassword,
-                            textAlign: TextAlign.right,
-                            style: AppTextStyles.bodyStrong
-                                .copyWith(color: AppColors.primary)),
+                        onTap: () => Navigator.of(
+                          context,
+                        ).pushNamed(AppRoutes.forgotPassword),
+                        child: Text(
+                          AppStrings.forgotPassword,
+                          textAlign: TextAlign.right,
+                          style: AppTextStyles.bodyStrong.copyWith(
+                            color: AppColors.primary,
+                          ),
+                        ),
                       ),
                     ),
                     SizedBox(height: AppDimens.md.h),
@@ -126,8 +129,9 @@ class _LoginViewState extends State<_LoginView> {
                     _FooterLink(
                       leading: AppStrings.noAccount,
                       action: AppStrings.createAccount,
-                      onTap: () => Navigator.of(context)
-                          .pushReplacementNamed(AppRoutes.register),
+                      onTap: () => Navigator.of(
+                        context,
+                      ).pushReplacementNamed(AppRoutes.register),
                     ),
                     SizedBox(height: AppDimens.lg.h),
                   ],
@@ -161,9 +165,10 @@ class _FooterLink extends StatelessWidget {
         children: [
           Text(leading, style: AppTextStyles.caption),
           SizedBox(width: 4.w),
-          Text(action,
-              style: AppTextStyles.bodyStrong
-                  .copyWith(color: AppColors.primary)),
+          Text(
+            action,
+            style: AppTextStyles.bodyStrong.copyWith(color: AppColors.primary),
+          ),
         ],
       ),
     );

@@ -52,11 +52,13 @@ class _RegisterViewState extends State<_RegisterView> {
 
   void _submit(BuildContext context) {
     if (_formKey.currentState!.validate() && _agreed) {
-      context.read<RegisterBloc>().add(RegisterSubmitted(
-            name: _name.text.trim(),
-            email: _email.text.trim(),
-            password: _password.text,
-          ));
+      context.read<RegisterBloc>().add(
+        RegisterSubmitted(
+          name: _name.text.trim(),
+          email: _email.text.trim(),
+          password: _password.text,
+        ),
+      );
     } else if (!_agreed) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('يرجى الموافقة على الشروط أولًا')),
@@ -72,11 +74,13 @@ class _RegisterViewState extends State<_RegisterView> {
         child: BlocConsumer<RegisterBloc, RegisterState>(
           listener: (context, state) {
             if (state.status == UIStatus.success) {
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil(AppRoutes.home, (r) => false);
+              Navigator.of(
+                context,
+              ).pushNamedAndRemoveUntil(AppRoutes.home, (r) => false);
             } else if (state.status == UIStatus.error) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(state.message)));
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.message)));
             }
           },
           builder: (context, state) {
@@ -88,18 +92,26 @@ class _RegisterViewState extends State<_RegisterView> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     SizedBox(height: AppDimens.xl.h),
-                    Text(AppStrings.registerTitle,
-                        style: AppTextStyles.h1, textAlign: TextAlign.right),
+                    Text(
+                      AppStrings.registerTitle,
+                      style: AppTextStyles.h1,
+                      textAlign: TextAlign.right,
+                    ),
                     SizedBox(height: AppDimens.xs.h),
-                    Text(AppStrings.registerSubtitle,
-                        style: AppTextStyles.pageSubtitle,
-                        textAlign: TextAlign.right),
+                    Text(
+                      AppStrings.registerSubtitle,
+                      style: AppTextStyles.pageSubtitle,
+                      textAlign: TextAlign.right,
+                    ),
                     SizedBox(height: AppDimens.lg.h),
                     AuthTextField(
                       label: AppStrings.fullName,
                       controller: _name,
-                      validator: (v) => validateField(v ?? '', context,
-                          fieldName: AppStrings.fullName),
+                      validator: (v) => validateField(
+                        v ?? '',
+                        context,
+                        fieldName: AppStrings.fullName,
+                      ),
                     ),
                     SizedBox(height: AppDimens.md.h),
                     AuthTextField(
@@ -125,12 +137,14 @@ class _RegisterViewState extends State<_RegisterView> {
                           onChanged: (v) =>
                               setState(() => _agreed = v ?? false),
                         ),
-                        const Spacer(),
-                        Flexible(
-                          child: Text(AppStrings.agreeTerms,
-                              textAlign: TextAlign.right,
-                              style: AppTextStyles.bodyStrong
-                                  .copyWith(color: AppColors.primaryDark)),
+                        Expanded(
+                          child: Text(
+                            AppStrings.agreeTerms,
+                            textAlign: TextAlign.start,
+                            style: AppTextStyles.bodyStrong.copyWith(
+                              color: AppColors.primaryDark,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -142,17 +156,23 @@ class _RegisterViewState extends State<_RegisterView> {
                     ),
                     SizedBox(height: AppDimens.xl.h),
                     GestureDetector(
-                      onTap: () => Navigator.of(context)
-                          .pushReplacementNamed(AppRoutes.login),
+                      onTap: () => Navigator.of(
+                        context,
+                      ).pushReplacementNamed(AppRoutes.login),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(AppStrings.login,
-                              style: AppTextStyles.bodyStrong
-                                  .copyWith(color: AppColors.primaryDark)),
+                          Text(
+                            AppStrings.login,
+                            style: AppTextStyles.bodyStrong.copyWith(
+                              color: AppColors.primaryDark,
+                            ),
+                          ),
                           SizedBox(width: 4.w),
-                          Text(AppStrings.haveAccount,
-                              style: AppTextStyles.caption),
+                          Text(
+                            AppStrings.haveAccount,
+                            style: AppTextStyles.caption,
+                          ),
                         ],
                       ),
                     ),

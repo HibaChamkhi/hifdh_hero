@@ -20,7 +20,12 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<void> register(Map<String, dynamic> userInfo) async {
     final response = await remoteDataSource.register(userInfo);
-    response.fold((e) => throw e, (_) {});
+    response.fold((e) => throw e, (_) {
+      // Kept locally so the home/profile screens can greet the user; the
+      // token write in the data source clears prefs, so this must follow it.
+      final name = (userInfo['name'] as String?)?.trim() ?? '';
+      if (name.isNotEmpty) prefUtils.setUserName(name);
+    });
   }
 
   @override

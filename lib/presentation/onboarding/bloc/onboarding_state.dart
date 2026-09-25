@@ -4,9 +4,9 @@ class OnboardingState extends UIState<OnboardingProfile> {
   const OnboardingState({super.status, super.message, super.data});
 
   factory OnboardingState.initial() => const OnboardingState(
-        status: UIStatus.initial,
-        data: OnboardingProfile(),
-      );
+    status: UIStatus.initial,
+    data: OnboardingProfile(),
+  );
 
   /// Convenience: the current (never-null) profile.
   OnboardingProfile get profile => data ?? const OnboardingProfile();

@@ -53,7 +53,7 @@ class SurahListTile extends StatelessWidget {
               // Name + meta (RTL: reads immediately left of the badge).
               Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(

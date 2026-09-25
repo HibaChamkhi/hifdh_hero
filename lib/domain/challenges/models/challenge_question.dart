@@ -20,12 +20,20 @@ class ChallengeQuestion extends Equatable {
   /// Human-readable source, e.g. "الملك · آية 2".
   final String reference;
 
+  /// The ayah this question actually tests — for complete-the-ayah that is the
+  /// answer, not the prompt. Answering it counts as a review of this ayah, so
+  /// practice feeds the spaced-repetition schedule.
+  final int surahNumber;
+  final int ayahNumber;
+
   const ChallengeQuestion({
     required this.type,
     required this.prompt,
     required this.options,
     required this.correctIndex,
     required this.reference,
+    required this.surahNumber,
+    required this.ayahNumber,
     this.promptSubtitle,
   });
 
@@ -34,6 +42,14 @@ class ChallengeQuestion extends Equatable {
   bool isCorrect(int? selectedIndex) => selectedIndex == correctIndex;
 
   @override
-  List<Object?> get props =>
-      [type, prompt, promptSubtitle, options, correctIndex, reference];
+  List<Object?> get props => [
+    type,
+    prompt,
+    promptSubtitle,
+    options,
+    correctIndex,
+    reference,
+    surahNumber,
+    ayahNumber,
+  ];
 }

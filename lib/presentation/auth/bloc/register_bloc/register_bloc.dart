@@ -30,10 +30,12 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       });
       emit(state.copyWith(status: UIStatus.success));
     } on Exception catch (e) {
-      emit(state.copyWith(
-        status: UIStatus.error,
-        message: mapExceptionToMessage(e),
-      ));
+      emit(
+        state.copyWith(
+          status: UIStatus.error,
+          message: mapExceptionToMessage(e),
+        ),
+      );
     }
   }
 }

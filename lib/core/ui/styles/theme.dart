@@ -22,7 +22,7 @@ class AppTheme {
         onSurface: AppColors.textPrimary,
         error: AppColors.danger,
       ),
-      textTheme: _textTheme(AppColors.textPrimary),
+      textTheme: _textTheme(AppColors.textPrimary, Brightness.light),
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.background,
         surfaceTintColor: Colors.transparent,
@@ -79,7 +79,7 @@ class AppTheme {
         onSurface: AppColors.darkTextPrimary,
         error: AppColors.danger,
       ),
-      textTheme: _textTheme(AppColors.darkTextPrimary),
+      textTheme: _textTheme(AppColors.darkTextPrimary, Brightness.dark),
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.darkBackground,
         surfaceTintColor: Colors.transparent,
@@ -99,15 +99,29 @@ class AppTheme {
     );
   }
 
-  static TextTheme _textTheme(Color color) {
-    return TextTheme(
-      headlineLarge: AppTextStyles.pageTitle.copyWith(color: color),
-      headlineMedium: AppTextStyles.h2.copyWith(color: color),
-      titleLarge: AppTextStyles.h3.copyWith(color: color),
-      bodyLarge: AppTextStyles.body.copyWith(color: color),
-      bodyMedium: AppTextStyles.body.copyWith(color: color),
-      labelLarge: AppTextStyles.button,
-    );
+  /// Starts from the Material defaults so every slot exists — dialogs, list
+  /// tiles and snackbars read slots the app's own styles don't define — then
+  /// applies the Arabic UI face across all of them and overrides the slots the
+  /// design system has an opinion about.
+  static TextTheme _textTheme(Color color, Brightness brightness) {
+    final typography = Typography.material2021();
+    final base = brightness == Brightness.dark
+        ? typography.white
+        : typography.black;
+    return base
+        .apply(
+          fontFamily: AppTextStyles.uiFont,
+          bodyColor: color,
+          displayColor: color,
+        )
+        .copyWith(
+          headlineLarge: AppTextStyles.pageTitle.copyWith(color: color),
+          headlineMedium: AppTextStyles.h2.copyWith(color: color),
+          titleLarge: AppTextStyles.h3.copyWith(color: color),
+          bodyLarge: AppTextStyles.body.copyWith(color: color),
+          bodyMedium: AppTextStyles.body.copyWith(color: color),
+          labelLarge: AppTextStyles.button,
+        );
   }
 
   static InputDecorationTheme _inputTheme({
@@ -115,9 +129,9 @@ class AppTheme {
     required Color border,
   }) {
     OutlineInputBorder side(Color c, [double w = 1]) => OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppDimens.radiusLg),
-          borderSide: BorderSide(color: c, width: w),
-        );
+      borderRadius: BorderRadius.circular(AppDimens.radiusLg),
+      borderSide: BorderSide(color: c, width: w),
+    );
     return InputDecorationTheme(
       filled: true,
       fillColor: fill,

@@ -23,8 +23,8 @@ class RevisionRepositoryImpl implements RevisionRepository {
     required this.onboardingRepository,
   }) : scheduler = const SpacedRepetition();
 
-  // If the user selected no surahs in onboarding, seed a small default set so
-  // the revision screens are populated for demoing.
+  // If the user marked nothing in onboarding, seed a small default set so the
+  // revision screens are populated for demoing.
   static const _defaultSurahs = [1, 112, 113, 114];
   static const _maxAyahsPerSurah = 8;
   static const _maxSeeded = 40;
@@ -33,28 +33,43 @@ class RevisionRepositoryImpl implements RevisionRepository {
   Future<void> ensureSeeded() async {
     if (localDataSource.getStates().isNotEmpty) return;
     final today = Day.today();
-    final memorized = onboardingRepository.getProfile().memorizedSurahs;
-    final surahs = memorized.isNotEmpty ? memorized : _defaultSurahs;
+    final memorized = onboardingRepository.getProfile().memorized;
     final meta = await quranRepository.getSurahs();
     final ayahCountOf = {for (final s in meta) s.number: s.ayahCount};
+    // Schedule the ayahs the user actually marked, not every ayah of every
+    // surah they touched.
+    final bySurah = memorized.isEmpty
+        ? {
+            for (final s in _defaultSurahs)
+              s: [for (var a = 1; a <= (ayahCountOf[s] ?? 0); a++) a],
+          }
+        : {
+            for (final surah in memorized.startedSurahs)
+              surah: [
+                for (var a = 1; a <= (ayahCountOf[surah] ?? 0); a++)
+                  if (memorized.contains(surah, a)) a,
+              ],
+          };
 
     final states = <AyahReviewState>[];
     var i = 0;
-    for (final surah in surahs) {
-      final count = ayahCountOf[surah] ?? 0;
-      final take = count < _maxAyahsPerSurah ? count : _maxAyahsPerSurah;
-      for (var ayah = 1; ayah <= take; ayah++) {
+    for (final entry in bySurah.entries) {
+      final surah = entry.key;
+      final ayahs = entry.value.take(_maxAyahsPerSurah);
+      for (final ayah in ayahs) {
         if (states.length >= _maxSeeded) break;
         // Deterministic stagger so strengths/last-reviewed vary (no RNG).
         final box = i % 4; // 0..3
         final lastDay = today - (1 + (i * 7) % 20);
-        states.add(scheduler.initial(
-          surahNumber: surah,
-          ayahNumber: ayah,
-          today: today,
-          box: box,
-          lastReviewedDay: lastDay,
-        ));
+        states.add(
+          scheduler.initial(
+            surahNumber: surah,
+            ayahNumber: ayah,
+            today: today,
+            box: box,
+            lastReviewedDay: lastDay,
+          ),
+        );
         i++;
       }
     }
@@ -74,11 +89,12 @@ class RevisionRepositoryImpl implements RevisionRepository {
     await ensureSeeded();
     final today = Day.today();
     final names = await _surahNames();
-    final due = localDataSource.getStates().where((s) => s.isDue(today)).toList()
-      ..sort((a, b) {
-        final overdue = (today - b.dueDay).compareTo(today - a.dueDay);
-        return overdue != 0 ? overdue : a.box.compareTo(b.box);
-      });
+    final due =
+        localDataSource.getStates().where((s) => s.isDue(today)).toList()
+          ..sort((a, b) {
+            final overdue = (today - b.dueDay).compareTo(today - a.dueDay);
+            return overdue != 0 ? overdue : a.box.compareTo(b.box);
+          });
     return RevisionPlan(
       items: due.take(limit).map((s) => _enrich(s, names)).toList(),
     );
@@ -93,22 +109,31 @@ class RevisionRepositoryImpl implements RevisionRepository {
         localDataSource.getStates().where((s) => s.isWeak(today)).toList()
           ..sort((a, b) {
             final byBox = a.box.compareTo(b.box);
-            return byBox != 0 ? byBox : (today - b.dueDay).compareTo(today - a.dueDay);
+            return byBox != 0
+                ? byBox
+                : (today - b.dueDay).compareTo(today - a.dueDay);
           });
     return weak.take(limit).map((s) => _enrich(s, names)).toList();
   }
 
   @override
   Future<void> recordReview(
-      int surahNumber, int ayahNumber, bool correct) async {
+    int surahNumber,
+    int ayahNumber,
+    bool correct,
+  ) async {
     final today = Day.today();
     final states = localDataSource.getStates();
-    final idx = states
-        .indexWhere((s) => s.surahNumber == surahNumber && s.ayahNumber == ayahNumber);
+    final idx = states.indexWhere(
+      (s) => s.surahNumber == surahNumber && s.ayahNumber == ayahNumber,
+    );
     final current = idx >= 0
         ? states[idx]
         : scheduler.initial(
-            surahNumber: surahNumber, ayahNumber: ayahNumber, today: today);
+            surahNumber: surahNumber,
+            ayahNumber: ayahNumber,
+            today: today,
+          );
     final updated = scheduler.review(current, correct, today);
     if (idx >= 0) {
       states[idx] = updated;
@@ -146,7 +171,9 @@ class RevisionRepositoryImpl implements RevisionRepository {
     // days reviewed within the current calendar month
     final now = DateTime.now();
     final monthStart = Day.fromDateTime(DateTime.utc(now.year, now.month, 1));
-    final daysThisMonth = days.where((d) => d >= monthStart && d <= today).length;
+    final daysThisMonth = days
+        .where((d) => d >= monthStart && d <= today)
+        .length;
 
     return RevisionHistory(
       reviewedDays: days,

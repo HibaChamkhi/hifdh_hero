@@ -47,8 +47,9 @@ class LevelOption extends StatelessWidget {
               Text(
                 label,
                 style: AppTextStyles.h3.copyWith(
-                  color:
-                      selected ? AppColors.primaryDark : AppColors.textPrimary,
+                  color: selected
+                      ? AppColors.primaryDark
+                      : AppColors.textPrimary,
                 ),
               ),
             ],

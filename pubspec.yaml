@@ -29,6 +29,8 @@ dependencies:
 
   # --- Added for Hifz Hero (localization/RTL) ---
   intl: ^0.20.2
+  image_picker: ^1.2.3
+  path_provider: ^2.1.6
 
 dev_dependencies:
   flutter_test:
@@ -50,6 +52,18 @@ flutter:
   # (e.g. Amiri Quran) into assets/fonts and register them below.
   # See README_ARCHITECTURE.md → "Fonts / Typography".
   fonts:
+    - family: Tajawal
+      fonts:
+        - asset: assets/fonts/tajawal/Tajawal-Regular.ttf
+        - asset: assets/fonts/tajawal/Tajawal-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/tajawal/Tajawal-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/tajawal/Tajawal-ExtraBold.ttf
+          weight: 800
+    - family: AmiriQuran
+      fonts:
+        - asset: assets/fonts/amiri/AmiriQuran-Regular.ttf
     - family: Poppins
       fonts:
         - asset: assets/fonts/poppins/Poppins-Regular.ttf

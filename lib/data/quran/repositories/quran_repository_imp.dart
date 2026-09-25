@@ -38,14 +38,15 @@ class QuranRepositoryImpl implements QuranRepository {
     );
     final meta = await localDataSource.loadSurahMeta();
     return meta
-        .where((s) =>
-            s.number >= juz.startSurah && s.number <= juz.endSurah)
+        .where((s) => s.number >= juz.startSurah && s.number <= juz.endSurah)
         .toList();
   }
 
   @override
-  Future<List<AyahSearchResult>> searchAyahs(String query,
-      {int limit = 30}) async {
+  Future<List<AyahSearchResult>> searchAyahs(
+    String query, {
+    int limit = 30,
+  }) async {
     if (query.trim().isEmpty) return const [];
     final meta = await localDataSource.loadSurahMeta();
     final results = <AyahSearchResult>[];
@@ -53,12 +54,14 @@ class QuranRepositoryImpl implements QuranRepository {
       final surah = await localDataSource.loadSurah(s.number);
       for (final Ayah a in surah.ayahs) {
         if (ArabicText.contains(a.text, query)) {
-          results.add(AyahSearchResult(
-            surahNumber: surah.number,
-            surahName: surah.name,
-            ayahNumber: a.number,
-            text: a.text,
-          ));
+          results.add(
+            AyahSearchResult(
+              surahNumber: surah.number,
+              surahName: surah.name,
+              ayahNumber: a.number,
+              text: a.text,
+            ),
+          );
           if (results.length >= limit) return results;
         }
       }
@@ -72,9 +75,11 @@ class QuranRepositoryImpl implements QuranRepository {
     if (query.trim().isEmpty) return meta;
     final q = query.trim().toLowerCase();
     return meta
-        .where((s) =>
-            ArabicText.contains(s.name, query) ||
-            s.englishName.toLowerCase().contains(q))
+        .where(
+          (s) =>
+              ArabicText.contains(s.name, query) ||
+              s.englishName.toLowerCase().contains(q),
+        )
         .toList();
   }
 }

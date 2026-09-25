@@ -22,15 +22,17 @@ class AuthRemoteDataSource {
     required this.networkInfo,
   });
 
-  Future<Either<Exception, Unit>> register(Map<String, dynamic> userInfo) async {
+  Future<Either<Exception, Unit>> register(
+    Map<String, dynamic> userInfo,
+  ) async {
     if (AppConfig.useMockAuth) return _mockAuthSuccess();
     final body = json.encode(userInfo);
     return performNetworkRequest<Unit>(
       operation: () async => httpClient.httpInterceptor().post(
-            Uri.parse('${AppConfig.apiBaseUrl}/auth/register'),
-            headers: {'Content-Type': 'application/json'},
-            body: body,
-          ),
+        Uri.parse('${AppConfig.apiBaseUrl}/auth/register'),
+        headers: {'Content-Type': 'application/json'},
+        body: body,
+      ),
       handleResponse: (responseJson) {
         _storeTokens(responseJson);
         return unit;
@@ -44,10 +46,10 @@ class AuthRemoteDataSource {
     final body = json.encode({'email': email, 'password': password});
     return performNetworkRequest<Unit>(
       operation: () async => httpClient.httpInterceptor().post(
-            Uri.parse('${AppConfig.apiBaseUrl}/auth/login'),
-            headers: {'Content-Type': 'application/json'},
-            body: body,
-          ),
+        Uri.parse('${AppConfig.apiBaseUrl}/auth/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: body,
+      ),
       handleResponse: (responseJson) {
         _storeTokens(responseJson);
         return unit;
@@ -64,10 +66,10 @@ class AuthRemoteDataSource {
     final body = json.encode({'email': email});
     return performNetworkRequest<Unit>(
       operation: () async => httpClient.httpInterceptor().post(
-            Uri.parse('${AppConfig.apiBaseUrl}/auth/forgot-password'),
-            headers: {'Content-Type': 'application/json'},
-            body: body,
-          ),
+        Uri.parse('${AppConfig.apiBaseUrl}/auth/forgot-password'),
+        headers: {'Content-Type': 'application/json'},
+        body: body,
+      ),
       handleResponse: (_) => unit,
       networkInfo: networkInfo,
     );
@@ -80,8 +82,8 @@ class AuthRemoteDataSource {
     }
     return performNetworkRequest<Unit>(
       operation: () async => httpClient.httpInterceptor().delete(
-            Uri.parse('${AppConfig.apiBaseUrl}/auth/logout'),
-          ),
+        Uri.parse('${AppConfig.apiBaseUrl}/auth/logout'),
+      ),
       handleResponse: (_) {
         prefUtils.clear();
         return unit;

@@ -3,9 +3,7 @@ class ArabicText {
   ArabicText._();
 
   // Tashkeel (harakat), tatweel, superscript alef, small marks, quran signs.
-  static final RegExp _diacritics = RegExp(
-    r'[ؐ-ًؚ-ٰٟۖ-ۜ۟-۪ۨ-ۭـ]',
-  );
+  static final RegExp _diacritics = RegExp(r'[ؐ-ًؚ-ٰٟۖ-ۜ۟-۪ۨ-ۭـ]');
 
   /// Removes diacritics and normalizes letter variants so that searching for
   /// "الرحمن" matches "ٱلرَّحۡمَٰن".
@@ -26,4 +24,14 @@ class ArabicText {
     if (needle.trim().isEmpty) return true;
     return normalize(haystack).contains(normalize(needle));
   }
+}
+
+/// Arabic-Indic digits, for numerals shown inside Arabic text — ayah markers
+/// in the mushaf carry ٤٢, not 42.
+String toArabicNumerals(int value) {
+  const digits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+  return value.toString().split('').map((c) {
+    final d = int.tryParse(c);
+    return d == null ? c : digits[d];
+  }).join();
 }

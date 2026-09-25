@@ -61,26 +61,33 @@ class AyahReviewState extends Equatable {
   }
 
   Map<String, dynamic> toJson() => {
-        's': surahNumber,
-        'a': ayahNumber,
-        'box': box,
-        'due': dueDay,
-        'last': lastReviewedDay,
-        'count': reviewCount,
-        'lapses': lapses,
-      };
+    's': surahNumber,
+    'a': ayahNumber,
+    'box': box,
+    'due': dueDay,
+    'last': lastReviewedDay,
+    'count': reviewCount,
+    'lapses': lapses,
+  };
 
   factory AyahReviewState.fromJson(Map<String, dynamic> j) => AyahReviewState(
-        surahNumber: j['s'] as int,
-        ayahNumber: j['a'] as int,
-        box: j['box'] as int? ?? 0,
-        dueDay: j['due'] as int? ?? 0,
-        lastReviewedDay: j['last'] as int? ?? -1,
-        reviewCount: j['count'] as int? ?? 0,
-        lapses: j['lapses'] as int? ?? 0,
-      );
+    surahNumber: j['s'] as int,
+    ayahNumber: j['a'] as int,
+    box: j['box'] as int? ?? 0,
+    dueDay: j['due'] as int? ?? 0,
+    lastReviewedDay: j['last'] as int? ?? -1,
+    reviewCount: j['count'] as int? ?? 0,
+    lapses: j['lapses'] as int? ?? 0,
+  );
 
   @override
-  List<Object?> get props =>
-      [surahNumber, ayahNumber, box, dueDay, lastReviewedDay, reviewCount, lapses];
+  List<Object?> get props => [
+    surahNumber,
+    ayahNumber,
+    box,
+    dueDay,
+    lastReviewedDay,
+    reviewCount,
+    lapses,
+  ];
 }

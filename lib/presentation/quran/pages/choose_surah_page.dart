@@ -9,7 +9,7 @@ import '../../../core/ui/styles/text_styles.dart';
 import '../../../core/ui/widgets/app_search_field.dart';
 import '../../../core/ui/widgets/empty_state.dart';
 import '../../../core/ui/widgets/page_header.dart';
-import '../../challenges/pages/surah_challenges_page.dart';
+import 'surah_reader_page.dart';
 import '../bloc/quran_bloc.dart';
 import '../widgets/surah_list_tile.dart';
 
@@ -80,10 +80,11 @@ class _ChooseSurahView extends StatelessWidget {
                       itemBuilder: (context, i) => SurahListTile(
                         surah: surahs[i],
                         highlighted: i == 0,
+                        // Reading is the primary action; the reader keeps
+                        // "تدرّب" one tap away for the challenge hub.
                         onTap: () => Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) =>
-                                SurahChallengesPage(surah: surahs[i]),
+                            builder: (_) => SurahReaderPage(surah: surahs[i]),
                           ),
                         ),
                       ),

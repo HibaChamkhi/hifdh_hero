@@ -10,17 +10,9 @@ class UIState<T> extends Equatable {
   final String message;
   final T? data;
 
-  const UIState({
-    this.status = UIStatus.loading,
-    this.message = "",
-    this.data,
-  });
+  const UIState({this.status = UIStatus.loading, this.message = "", this.data});
 
-  UIState<T> copyWith({
-    UIStatus? status,
-    String? message,
-    T? data,
-  }) {
+  UIState<T> copyWith({UIStatus? status, String? message, T? data}) {
     return UIState<T>(
       status: status ?? this.status,
       message: message ?? this.message,

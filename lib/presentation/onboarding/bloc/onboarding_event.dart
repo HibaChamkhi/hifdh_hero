@@ -28,6 +28,16 @@ class SurahToggled extends OnboardingEvent {
   List<Object?> get props => [surahNumber];
 }
 
+/// The full memorized set, as returned by the surah picker (screen 03).
+class MemorizedSurahsChanged extends OnboardingEvent {
+  final MemorizedAyahs memorized;
+
+  const MemorizedSurahsChanged(this.memorized);
+
+  @override
+  List<Object?> get props => [memorized];
+}
+
 class OnboardingSubmitted extends OnboardingEvent {
   const OnboardingSubmitted();
 }

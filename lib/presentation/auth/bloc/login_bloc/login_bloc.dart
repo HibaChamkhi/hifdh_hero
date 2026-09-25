@@ -26,10 +26,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       await authRepository.login(event.email, event.password);
       emit(state.copyWith(status: UIStatus.success));
     } on Exception catch (e) {
-      emit(state.copyWith(
-        status: UIStatus.error,
-        message: mapExceptionToMessage(e),
-      ));
+      emit(
+        state.copyWith(
+          status: UIStatus.error,
+          message: mapExceptionToMessage(e),
+        ),
+      );
     }
   }
 }

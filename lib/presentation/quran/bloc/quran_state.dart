@@ -6,11 +6,7 @@ class QuranState extends UIState<List<Surah>> {
   List<Surah> get surahs => data ?? const [];
 
   @override
-  QuranState copyWith({
-    UIStatus? status,
-    String? message,
-    List<Surah>? data,
-  }) {
+  QuranState copyWith({UIStatus? status, String? message, List<Surah>? data}) {
     return QuranState(
       status: status ?? this.status,
       message: message ?? this.message,

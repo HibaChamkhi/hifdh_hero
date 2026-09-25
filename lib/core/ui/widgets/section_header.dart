@@ -20,11 +20,8 @@ class SectionHeader extends StatelessWidget {
 
   /// Larger variant used where the section reads as a heading rather than a
   /// field label (screen 14 — "اختاري تحديًا").
-  const SectionHeader.strong({
-    super.key,
-    required this.title,
-    this.trailing,
-  }) : style = AppTextStyles.h3;
+  const SectionHeader.strong({super.key, required this.title, this.trailing})
+    : style = AppTextStyles.h3;
 
   @override
   Widget build(BuildContext context) {

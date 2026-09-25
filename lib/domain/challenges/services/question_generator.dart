@@ -52,54 +52,69 @@ class QuestionGenerator {
   // ---- generators ----
 
   List<ChallengeQuestion> _findSurah(
-      Surah surah, List<Surah> allSurahs, int count) {
+    Surah surah,
+    List<Surah> allSurahs,
+    int count,
+  ) {
     if (surah.ayahs.isEmpty) return const [];
     final questions = <ChallengeQuestion>[];
-    final otherNames =
-        allSurahs.where((s) => s.number != surah.number).map((s) => s.name).toList();
+    final otherNames = allSurahs
+        .where((s) => s.number != surah.number)
+        .map((s) => s.name)
+        .toList();
     for (var i = 0; i < count; i++) {
       final ayah = surah.ayahs[_random.nextInt(surah.ayahs.length)];
-      final distractors = (otherNames.toList()..shuffle(_random)).take(2).toList();
+      final distractors = (otherNames.toList()..shuffle(_random))
+          .take(2)
+          .toList();
       final (options, correctIndex) = _mcq(surah.name, distractors);
-      questions.add(ChallengeQuestion(
-        type: ChallengeType.findSurah,
-        prompt: ayah.text,
-        options: options,
-        correctIndex: correctIndex,
-        reference: '${surah.name} · آية ${ayah.number}',
-      ));
+      questions.add(
+        ChallengeQuestion(
+          type: ChallengeType.findSurah,
+          prompt: ayah.text,
+          options: options,
+          correctIndex: correctIndex,
+          reference: '${surah.name} · آية ${ayah.number}',
+          surahNumber: surah.number,
+          ayahNumber: ayah.number,
+        ),
+      );
     }
     return questions;
   }
 
   List<ChallengeQuestion> _missingWord(Surah surah, int count) {
-    final usable =
-        surah.ayahs.where((a) => _words(a.text).length >= 3).toList();
+    final usable = surah.ayahs
+        .where((a) => _words(a.text).length >= 3)
+        .toList();
     if (usable.isEmpty) return const [];
     final allWords = surah.ayahs.expand((a) => _words(a.text)).toSet().toList();
     final questions = <ChallengeQuestion>[];
     for (var i = 0; i < count; i++) {
       final ayah = usable[_random.nextInt(usable.length)];
       final words = _words(ayah.text);
-      final blankIndex = 1 + _random.nextInt(words.length - 1); // never the first
+      final blankIndex =
+          1 + _random.nextInt(words.length - 1); // never the first
       final answer = words[blankIndex];
       final shown = List<String>.from(words)..[blankIndex] = '____';
-      final distractors =
-          _pick(allWords, 2, (w) => w != answer);
+      final distractors = _pick(allWords, 2, (w) => w != answer);
       final (options, correctIndex) = _mcq(answer, distractors);
-      questions.add(ChallengeQuestion(
-        type: ChallengeType.missingWord,
-        prompt: shown.join(' '),
-        options: options,
-        correctIndex: correctIndex,
-        reference: '${surah.name} · آية ${ayah.number}',
-      ));
+      questions.add(
+        ChallengeQuestion(
+          type: ChallengeType.missingWord,
+          prompt: shown.join(' '),
+          options: options,
+          correctIndex: correctIndex,
+          reference: '${surah.name} · آية ${ayah.number}',
+          surahNumber: surah.number,
+          ayahNumber: ayah.number,
+        ),
+      );
     }
     return questions;
   }
 
-  List<ChallengeQuestion> _guessJuz(
-      Surah surah, List<Juz> juzList, int count) {
+  List<ChallengeQuestion> _guessJuz(Surah surah, List<Juz> juzList, int count) {
     if (surah.ayahs.isEmpty || juzList.isEmpty) return const [];
     final questions = <ChallengeQuestion>[];
     for (var i = 0; i < count; i++) {
@@ -121,13 +136,17 @@ class QuestionGenerator {
         delta++;
       }
       final (options, correctIndex) = _mcq(correct, distractors.toList());
-      questions.add(ChallengeQuestion(
-        type: ChallengeType.guessJuz,
-        prompt: ayah.text,
-        options: options,
-        correctIndex: correctIndex,
-        reference: '${surah.name} · آية ${ayah.number}',
-      ));
+      questions.add(
+        ChallengeQuestion(
+          type: ChallengeType.guessJuz,
+          prompt: ayah.text,
+          options: options,
+          correctIndex: correctIndex,
+          reference: '${surah.name} · آية ${ayah.number}',
+          surahNumber: surah.number,
+          ayahNumber: ayah.number,
+        ),
+      );
     }
     return questions;
   }
@@ -145,14 +164,18 @@ class QuestionGenerator {
         (a) => a.number != next.number && a.number != current.number,
       ).map((a) => a.text).toList();
       final (options, correctIndex) = _mcq(next.text, distractors);
-      questions.add(ChallengeQuestion(
-        type: ChallengeType.completeAyah,
-        prompt: current.text,
-        promptSubtitle: '${surah.name} · آية ${current.number}',
-        options: options,
-        correctIndex: correctIndex,
-        reference: '${surah.name} · آية ${next.number}',
-      ));
+      questions.add(
+        ChallengeQuestion(
+          type: ChallengeType.completeAyah,
+          prompt: current.text,
+          promptSubtitle: '${surah.name} · آية ${current.number}',
+          options: options,
+          correctIndex: correctIndex,
+          reference: '${surah.name} · آية ${next.number}',
+          surahNumber: surah.number,
+          ayahNumber: next.number,
+        ),
+      );
     }
     return questions;
   }

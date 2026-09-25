@@ -31,8 +31,9 @@ class ChallengePlayPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<ChallengeBloc>()
-        ..add(ChallengeStarted(type: type, surahNumber: surahNumber)),
+      create: (_) =>
+          getIt<ChallengeBloc>()
+            ..add(ChallengeStarted(type: type, surahNumber: surahNumber)),
       child: _PlayView(type: type, surahName: surahName),
     );
   }
@@ -66,8 +67,11 @@ class _PlayView extends StatelessWidget {
               return Center(
                 child: Padding(
                   padding: EdgeInsets.all(AppDimens.lg.w),
-                  child: Text(state.message,
-                      textAlign: TextAlign.right, style: AppTextStyles.body),
+                  child: Text(
+                    state.message,
+                    textAlign: TextAlign.right,
+                    style: AppTextStyles.body,
+                  ),
                 ),
               );
             }

@@ -18,6 +18,10 @@ class RevisionHistory extends Equatable {
   bool reviewedOn(int dayNumber) => reviewedDays.contains(dayNumber);
 
   @override
-  List<Object?> get props =>
-      [reviewedDays, currentStreak, longestStreak, daysThisMonth];
+  List<Object?> get props => [
+    reviewedDays,
+    currentStreak,
+    longestStreak,
+    daysThisMonth,
+  ];
 }

@@ -85,8 +85,9 @@ class SubtleButton extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: AppTextStyles.bodyStrong
-            .copyWith(color: color ?? AppColors.textMuted),
+        style: AppTextStyles.bodyStrong.copyWith(
+          color: color ?? AppColors.textMuted,
+        ),
       ),
     );
   }

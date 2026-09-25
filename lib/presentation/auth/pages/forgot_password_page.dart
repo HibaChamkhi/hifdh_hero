@@ -45,9 +45,9 @@ class _ForgotViewState extends State<_ForgotView> {
 
   void _submit(BuildContext context) {
     if (_formKey.currentState!.validate()) {
-      context
-          .read<ForgotPasswordBloc>()
-          .add(ForgotPasswordSubmitted(_email.text.trim()));
+      context.read<ForgotPasswordBloc>().add(
+        ForgotPasswordSubmitted(_email.text.trim()),
+      );
     }
   }
 
@@ -64,54 +64,70 @@ class _ForgotViewState extends State<_ForgotView> {
               );
               Navigator.of(context).maybePop();
             } else if (state.status == UIStatus.error) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(state.message)));
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.message)));
             }
           },
           builder: (context, state) {
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppDimens.screenH.w),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SizedBox(height: AppDimens.xl.h),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: AuthLogo(),
+            // With the keyboard up there is far less height than this column
+            // wants; scroll instead of overflowing, and let the `Spacer` push
+            // the footer down only when there is room to spare.
+            return LayoutBuilder(
+              builder: (context, constraints) => SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: AppDimens.screenH.w),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: IntrinsicHeight(
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          SizedBox(height: AppDimens.xl.h),
+                          const AuthLogo(),
+                          SizedBox(height: AppDimens.md.h),
+                          Text(
+                            AppStrings.forgotTitle,
+                            style: AppTextStyles.h1,
+                            textAlign: TextAlign.right,
+                          ),
+                          SizedBox(height: AppDimens.xs.h),
+                          Text(
+                            AppStrings.forgotSubtitle,
+                            style: AppTextStyles.pageSubtitle,
+                            textAlign: TextAlign.right,
+                          ),
+                          SizedBox(height: AppDimens.xl.h),
+                          AuthTextField(
+                            label: AppStrings.email,
+                            controller: _email,
+                            hint: 'sara@example.com',
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (v) => validateEmail(v ?? '', context),
+                          ),
+                          SizedBox(height: AppDimens.lg.h),
+                          PrimaryButton(
+                            label: AppStrings.sendResetLink,
+                            loading: state.status == UIStatus.loading,
+                            onPressed: () => _submit(context),
+                          ),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () => Navigator.of(context).maybePop(),
+                            child: Text(
+                              AppStrings.backToLogin,
+                              textAlign: TextAlign.right,
+                              style: AppTextStyles.bodyStrong.copyWith(
+                                color: AppColors.primaryDark,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: AppDimens.md.h),
+                        ],
+                      ),
                     ),
-                    SizedBox(height: AppDimens.md.h),
-                    Text(AppStrings.forgotTitle,
-                        style: AppTextStyles.h1, textAlign: TextAlign.right),
-                    SizedBox(height: AppDimens.xs.h),
-                    Text(AppStrings.forgotSubtitle,
-                        style: AppTextStyles.pageSubtitle,
-                        textAlign: TextAlign.right),
-                    SizedBox(height: AppDimens.xl.h),
-                    AuthTextField(
-                      label: AppStrings.email,
-                      controller: _email,
-                      hint: 'sara@example.com',
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (v) => validateEmail(v ?? '', context),
-                    ),
-                    SizedBox(height: AppDimens.lg.h),
-                    PrimaryButton(
-                      label: AppStrings.sendResetLink,
-                      loading: state.status == UIStatus.loading,
-                      onPressed: () => _submit(context),
-                    ),
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: () => Navigator.of(context).maybePop(),
-                      child: Text(AppStrings.backToLogin,
-                          textAlign: TextAlign.right,
-                          style: AppTextStyles.bodyStrong
-                              .copyWith(color: AppColors.primaryDark)),
-                    ),
-                    SizedBox(height: AppDimens.md.h),
-                  ],
+                  ),
                 ),
               ),
             );

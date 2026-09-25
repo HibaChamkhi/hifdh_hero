@@ -25,12 +25,14 @@ class RevisionBloc extends Bloc<RevisionEvent, RevisionState> {
     final plan = await repository.getTodayPlan();
     final weak = await repository.getWeakAyahs();
     final history = await repository.getHistory();
-    emit(state.copyWith(
-      status: UIStatus.success,
-      plan: plan,
-      weak: weak,
-      history: history,
-    ));
+    emit(
+      state.copyWith(
+        status: UIStatus.success,
+        plan: plan,
+        weak: weak,
+        history: history,
+      ),
+    );
   }
 
   Future<void> _onRequested(
@@ -41,8 +43,12 @@ class RevisionBloc extends Bloc<RevisionEvent, RevisionState> {
     try {
       await _load(emit);
     } on Exception catch (e) {
-      emit(state.copyWith(
-          status: UIStatus.error, message: mapExceptionToMessage(e)));
+      emit(
+        state.copyWith(
+          status: UIStatus.error,
+          message: mapExceptionToMessage(e),
+        ),
+      );
     }
   }
 
@@ -52,11 +58,18 @@ class RevisionBloc extends Bloc<RevisionEvent, RevisionState> {
   ) async {
     try {
       await repository.recordReview(
-          event.surahNumber, event.ayahNumber, event.correct);
+        event.surahNumber,
+        event.ayahNumber,
+        event.correct,
+      );
       await _load(emit); // refresh plan/weak/history
     } on Exception catch (e) {
-      emit(state.copyWith(
-          status: UIStatus.error, message: mapExceptionToMessage(e)));
+      emit(
+        state.copyWith(
+          status: UIStatus.error,
+          message: mapExceptionToMessage(e),
+        ),
+      );
     }
   }
 }

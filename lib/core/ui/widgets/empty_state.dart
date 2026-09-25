@@ -28,50 +28,53 @@ class EmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: AppDimens.screenH.w),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Container(
-            width: AppDimens.iconTile.w,
-            height: AppDimens.iconTile.w,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: tint ?? AppColors.mint,
-              borderRadius: BorderRadius.circular(AppDimens.radiusMd.r),
-            ),
-            child: const DiamondMark(size: 20),
-          ),
-          SizedBox(height: AppDimens.md.h),
-          Text(
-            title,
-            textAlign: TextAlign.right,
-            style: AppTextStyles.h3,
-          ),
-          if (message != null) ...[
-            SizedBox(height: AppDimens.xxs.h),
-            Text(
-              message!,
-              textAlign: TextAlign.right,
-              style: AppTextStyles.caption,
-            ),
-          ],
-          if (actionLabel != null && onAction != null) ...[
-            SizedBox(height: AppDimens.sm.h),
-            TextButton(
-              onPressed: onAction,
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: AppDimens.xs.h),
+      // Used as a whole Scaffold body, where the width constraint is loose:
+      // without claiming the full width the column shrink-wraps and the block
+      // lands flush against the left edge instead of reading from the right.
+      child: SizedBox(
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: AppDimens.iconTile.w,
+              height: AppDimens.iconTile.w,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: tint ?? AppColors.mint,
+                borderRadius: BorderRadius.circular(AppDimens.radiusMd.r),
               ),
-              child: Text(
-                actionLabel!,
+              child: const DiamondMark(size: 20),
+            ),
+            SizedBox(height: AppDimens.md.h),
+            Text(title, textAlign: TextAlign.right, style: AppTextStyles.h3),
+            if (message != null) ...[
+              SizedBox(height: AppDimens.xxs.h),
+              Text(
+                message!,
                 textAlign: TextAlign.right,
-                style: AppTextStyles.bodyStrong
-                    .copyWith(color: AppColors.primary),
+                style: AppTextStyles.caption,
               ),
-            ),
+            ],
+            if (actionLabel != null && onAction != null) ...[
+              SizedBox(height: AppDimens.sm.h),
+              TextButton(
+                onPressed: onAction,
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: AppDimens.xs.h),
+                ),
+                child: Text(
+                  actionLabel!,
+                  textAlign: TextAlign.right,
+                  style: AppTextStyles.bodyStrong.copyWith(
+                    color: AppColors.primary,
+                  ),
+                ),
+              ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }

@@ -58,14 +58,18 @@ class WeakAyahsPage extends StatelessWidget {
                             item: item,
                             today: today,
                             onReview: () async {
-                              final res =
-                                  await showAyahReviewSheet(context, item);
+                              final res = await showAyahReviewSheet(
+                                context,
+                                item,
+                              );
                               if (res != null) {
-                                bloc.add(ReviewGraded(
-                                  surahNumber: item.surahNumber,
-                                  ayahNumber: item.ayahNumber,
-                                  correct: res,
-                                ));
+                                bloc.add(
+                                  ReviewGraded(
+                                    surahNumber: item.surahNumber,
+                                    ayahNumber: item.ayahNumber,
+                                    correct: res,
+                                  ),
+                                );
                               }
                             },
                           );

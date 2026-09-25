@@ -58,7 +58,7 @@ class ChallengeTypeCard extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 width: AppDimens.iconTile.w,

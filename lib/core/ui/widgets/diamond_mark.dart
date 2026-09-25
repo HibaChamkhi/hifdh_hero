@@ -47,12 +47,7 @@ class DiamondCluster extends StatelessWidget {
   final double size;
   final Color? color;
 
-  const DiamondCluster({
-    super.key,
-    this.count = 3,
-    this.size = 34,
-    this.color,
-  });
+  const DiamondCluster({super.key, this.count = 3, this.size = 34, this.color});
 
   @override
   Widget build(BuildContext context) {

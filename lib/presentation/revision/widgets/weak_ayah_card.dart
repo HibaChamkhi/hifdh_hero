@@ -35,8 +35,9 @@ class WeakAyahCard extends StatelessWidget {
         ? AppColors.roseText
         : (s.box == 2 ? AppColors.terracotta : AppColors.primary);
 
-    final last =
-        s.lastReviewedDay < 0 ? '—' : Day.agoLabel(s.lastReviewedDay, today);
+    final last = s.lastReviewedDay < 0
+        ? '—'
+        : Day.agoLabel(s.lastReviewedDay, today);
 
     return Container(
       padding: EdgeInsets.all(AppDimens.lg.w),

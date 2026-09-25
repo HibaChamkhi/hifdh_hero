@@ -49,30 +49,38 @@ class _SplashPageState extends State<SplashPage> {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: AppDimens.screenH.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              const Spacer(flex: 5),
-              const HifzLogo(size: 110),
-              SizedBox(height: AppDimens.lg.h),
-              Text(
-                AppStrings.appName,
-                textAlign: TextAlign.right,
-                style: AppTextStyles.pageTitle.copyWith(
-                  fontFamily: AppTextStyles.latinFont,
-                  fontSize: 30.sp,
+          // Scaffold hands its body *loose* width constraints, so the column
+          // would shrink-wrap to its widest child and hug one edge; claiming
+          // the full width is what gives `center` below something to centre in.
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              // The splash is a centred lockup: mark, wordmark and tagline all
+              // share one vertical axis regardless of text direction.
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Spacer(flex: 5),
+                const HifzLogo(size: 110),
+                SizedBox(height: AppDimens.lg.h),
+                Text(
+                  AppStrings.appName,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.pageTitle.copyWith(
+                    fontFamily: AppTextStyles.latinFont,
+                    fontSize: 30.sp,
+                  ),
                 ),
-              ),
-              SizedBox(height: AppDimens.xs.h),
-              Text(
-                AppStrings.tagline,
-                textAlign: TextAlign.right,
-                style: AppTextStyles.pageSubtitle,
-              ),
-              const Spacer(flex: 5),
-              const _PageDots(count: 3, active: 0),
-              SizedBox(height: AppDimens.xl.h),
-            ],
+                SizedBox(height: AppDimens.xs.h),
+                Text(
+                  AppStrings.tagline,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.pageSubtitle,
+                ),
+                const Spacer(flex: 5),
+                const _PageDots(count: 3, active: 0),
+                SizedBox(height: AppDimens.xl.h),
+              ],
+            ),
           ),
         ),
       ),
@@ -81,7 +89,7 @@ class _SplashPageState extends State<SplashPage> {
 }
 
 /// The three-dot indicator at the foot of the splash sequence, with the active
-/// dot drawn as a short pill. RTL: the run starts on the right.
+/// dot drawn as a short pill. Shrink-wraps so the parent column centres it.
 class _PageDots extends StatelessWidget {
   final int count;
   final int active;

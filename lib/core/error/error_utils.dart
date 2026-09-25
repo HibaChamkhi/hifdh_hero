@@ -42,8 +42,9 @@ Future<Either<Exception, T>> performNetworkRequest<T>({
         case 201:
         case 202:
         case 204:
-          final Map<String, dynamic> decodedJson =
-              response.body.isEmpty ? {} : json.decode(response.body);
+          final Map<String, dynamic> decodedJson = response.body.isEmpty
+              ? {}
+              : json.decode(response.body);
           return Right(handleResponse(decodedJson));
         case 401:
           throw UnauthorizedException(message: 'طلب غير مصرّح به');
@@ -63,7 +64,9 @@ Future<Either<Exception, T>> performNetworkRequest<T>({
           );
       }
     } on FormatException catch (e) {
-      return Left(ServerException(message: 'صيغة JSON غير صالحة: ${e.message}'));
+      return Left(
+        ServerException(message: 'صيغة JSON غير صالحة: ${e.message}'),
+      );
     } on Exception catch (e) {
       return Left(e);
     }

@@ -45,7 +45,7 @@ class AppSearchField extends StatelessWidget {
   }
 
   OutlineInputBorder get _border => OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppDimens.radiusLg.r),
-        borderSide: BorderSide.none,
-      );
+    borderRadius: BorderRadius.circular(AppDimens.radiusLg.r),
+    borderSide: BorderSide.none,
+  );
 }

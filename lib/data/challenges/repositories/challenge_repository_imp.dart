@@ -11,7 +11,7 @@ class ChallengeRepositoryImpl implements ChallengeRepository {
   final QuestionGenerator _generator;
 
   ChallengeRepositoryImpl({required this.quranRepository})
-      : _generator = QuestionGenerator();
+    : _generator = QuestionGenerator();
 
   @override
   Future<List<ChallengeQuestion>> generateChallenge({

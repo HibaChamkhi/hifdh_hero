@@ -3,18 +3,20 @@ import 'colors.dart';
 
 /// Typography for Hifz Hero.
 ///
-/// - [uiFont]    : Arabic UI font. Left null to fall back to the platform
-///                 Arabic system font. Bundle Tajawal/Cairo and set this to
-///                 'Tajawal' for a pixel-match with the mockups.
-/// - [quranFont] : dedicated Uthmani/Quran font (e.g. 'AmiriQuran' or
-///                 'UthmanicHafs') for rendering ayah text.
-/// - Poppins     : Latin numerals/labels (bundled, same as the starter).
+/// - [uiFont]    : Arabic UI face (Tajawal) — matches the mockups.
+/// - [quranFont] : Amiri Quran, an Uthmani face for ayah text. Distinct from
+///                 the UI face on purpose: the mushaf's letterforms and
+///                 diacritic placement are part of reading the text correctly.
+/// - Poppins     : Latin numerals/labels.
+///
+/// All three are bundled in `assets/fonts/` and registered in `pubspec.yaml`;
+/// none of them can silently fall back to a platform font.
 class AppTextStyles {
   AppTextStyles._();
 
-  static const String? uiFont = null; // set to 'Tajawal' once bundled
+  static const String uiFont = 'Tajawal';
   static const String latinFont = 'Poppins';
-  static const String quranFont = 'AmiriQuran'; // bundle before using
+  static const String quranFont = 'AmiriQuran';
 
   // ---- Page header (big right-aligned title + grey subtitle) ----
   static const TextStyle pageTitle = TextStyle(

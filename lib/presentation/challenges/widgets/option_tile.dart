@@ -19,10 +19,6 @@ class OptionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SelectionRow(
-      label: label,
-      selected: selected,
-      onTap: onTap,
-    );
+    return SelectionRow(label: label, selected: selected, onTap: onTap);
   }
 }

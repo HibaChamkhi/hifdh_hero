@@ -47,8 +47,7 @@ class SelectionRow extends StatelessWidget {
             border: selected && solid
                 ? null
                 : Border.all(
-                    color:
-                        selected ? AppColors.primary : AppColors.border,
+                    color: selected ? AppColors.primary : AppColors.border,
                     width: selected ? 1.4 : 1,
                   ),
           ),
@@ -59,7 +58,7 @@ class SelectionRow extends StatelessWidget {
               Expanded(
                 child: Text(
                   label,
-                  textAlign: TextAlign.left,
+                  textAlign: TextAlign.start,
                   overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.bodyStrong.copyWith(
                     color: selected

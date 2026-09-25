@@ -18,11 +18,9 @@ class HttpInterceptorImpl implements HttpInterceptor {
   @override
   InterceptedHttp httpInterceptor() {
     final client = HttpClient()
-      ..badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+      ..badCertificateCallback =
+          ((X509Certificate cert, String host, int port) => true);
     final ioClient = IOClient(client);
-    return InterceptedHttp.build(
-      client: ioClient,
-      interceptors: [httpClient],
-    );
+    return InterceptedHttp.build(client: ioClient, interceptors: [httpClient]);
   }
 }

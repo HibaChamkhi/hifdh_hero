@@ -42,11 +42,13 @@ class _PlanView extends StatelessWidget {
     for (final item in List.of(plan.items)) {
       final res = await showAyahReviewSheet(context, item);
       if (res == null) break;
-      bloc.add(ReviewGraded(
-        surahNumber: item.surahNumber,
-        ayahNumber: item.ayahNumber,
-        correct: res,
-      ));
+      bloc.add(
+        ReviewGraded(
+          surahNumber: item.surahNumber,
+          ayahNumber: item.ayahNumber,
+          correct: res,
+        ),
+      );
       await Future<void>.delayed(const Duration(milliseconds: 250));
     }
   }
@@ -72,84 +74,108 @@ class _PlanView extends StatelessWidget {
             }
             final bloc = context.read<RevisionBloc>();
             final plan = state.plan;
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppDimens.screenH.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  SizedBox(height: AppDimens.lg.h),
-                  const PageHeader(
-                    title: 'توصية اليوم',
-                    subtitle: 'بناءً على ما يحتاج تركيزًا اليوم',
-                  ),
-                  SizedBox(height: AppDimens.lg.h),
-                  if (plan.isEmpty)
-                    const Expanded(
-                      child: EmptyState(
-                        title: 'لا توجد مراجعات مستحقة اليوم',
-                        message: 'أحسنتِ — عودي غدًا لمتابعة خطتك',
-                      ),
-                    )
-                  else ...[
-                    ...plan.items.take(5).map(
-                          (item) => Padding(
-                            padding: EdgeInsets.only(bottom: AppDimens.sm.h),
-                            child: _DueRow(item: item),
-                          ),
-                        ),
-                    SizedBox(height: AppDimens.xs.h),
-                    Row(
+            // A long due-list plus the two action rows can outgrow a short
+            // viewport; scroll rather than overflow, while keeping the button
+            // pinned to the bottom whenever there is slack.
+            return LayoutBuilder(
+              builder: (context, constraints) => SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: AppDimens.screenH.w),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Expanded(
-                          child: StatTile(
-                            value: '${plan.ayahCount} آيات',
-                            label: 'عدد الآيات',
-                            latinValue: false,
-                          ),
+                        SizedBox(height: AppDimens.lg.h),
+                        const PageHeader(
+                          title: 'توصية اليوم',
+                          subtitle: 'بناءً على ما يحتاج تركيزًا اليوم',
                         ),
-                        SizedBox(width: AppDimens.sm.w),
-                        Expanded(
-                          child: StatTile(
-                            value: '${plan.estimatedMinutes} دقائق',
-                            label: 'الوقت المقدر',
-                            latinValue: false,
-                            valueColor: AppColors.primary,
+                        SizedBox(height: AppDimens.lg.h),
+                        if (plan.isEmpty)
+                          const Expanded(
+                            child: EmptyState(
+                              title: 'لا توجد مراجعات مستحقة اليوم',
+                              message: 'أحسنتِ — عودي غدًا لمتابعة خطتك',
+                            ),
+                          )
+                        else ...[
+                          ...plan.items
+                              .take(5)
+                              .map(
+                                (item) => Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: AppDimens.sm.h,
+                                  ),
+                                  child: _DueRow(item: item),
+                                ),
+                              ),
+                          SizedBox(height: AppDimens.xs.h),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: StatTile(
+                                  value: '${plan.ayahCount} آيات',
+                                  label: 'عدد الآيات',
+                                  latinValue: false,
+                                ),
+                              ),
+                              SizedBox(width: AppDimens.sm.w),
+                              Expanded(
+                                child: StatTile(
+                                  value: '${plan.estimatedMinutes} دقائق',
+                                  label: 'الوقت المقدر',
+                                  latinValue: false,
+                                  valueColor: AppColors.primary,
+                                ),
+                              ),
+                            ],
                           ),
+                          const Spacer(),
+                        ],
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextButton(
+                                onPressed: () =>
+                                    _open(context, bloc, const WeakAyahsPage()),
+                                child: Text(
+                                  'الآيات الضعيفة',
+                                  style: AppTextStyles.bodyStrong.copyWith(
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: TextButton(
+                                onPressed: () => _open(
+                                  context,
+                                  bloc,
+                                  const RevisionHistoryPage(),
+                                ),
+                                child: Text(
+                                  'سجل المراجعة',
+                                  style: AppTextStyles.bodyStrong.copyWith(
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
+                        SizedBox(height: AppDimens.sm.h),
+                        PrimaryButton(
+                          label: 'ابدأ المراجعة الذكية',
+                          enabled: !plan.isEmpty,
+                          onPressed: () =>
+                              _startSmartReview(context, bloc, plan),
+                        ),
+                        SizedBox(height: AppDimens.lg.h),
                       ],
                     ),
-                    const Spacer(),
-                  ],
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextButton(
-                          onPressed: () =>
-                              _open(context, bloc, const WeakAyahsPage()),
-                          child: Text('الآيات الضعيفة',
-                              style: AppTextStyles.bodyStrong
-                                  .copyWith(color: AppColors.primary)),
-                        ),
-                      ),
-                      Expanded(
-                        child: TextButton(
-                          onPressed: () => _open(
-                              context, bloc, const RevisionHistoryPage()),
-                          child: Text('سجل المراجعة',
-                              style: AppTextStyles.bodyStrong
-                                  .copyWith(color: AppColors.primary)),
-                        ),
-                      ),
-                    ],
                   ),
-                  SizedBox(height: AppDimens.sm.h),
-                  PrimaryButton(
-                    label: 'ابدأ المراجعة الذكية',
-                    enabled: !plan.isEmpty,
-                    onPressed: () => _startSmartReview(context, bloc, plan),
-                  ),
-                  SizedBox(height: AppDimens.lg.h),
-                ],
+                ),
               ),
             );
           },
@@ -188,8 +214,9 @@ class _DueRow extends StatelessWidget {
             child: Text(
               '${item.surahName}، الآية ${item.ayahNumber}',
               overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.bodyStrong
-                  .copyWith(color: AppColors.roseText),
+              style: AppTextStyles.bodyStrong.copyWith(
+                color: AppColors.roseText,
+              ),
             ),
           ),
         ],

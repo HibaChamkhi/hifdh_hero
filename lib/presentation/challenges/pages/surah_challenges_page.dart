@@ -46,45 +46,44 @@ class SurahChallengesPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
-        child: Padding(
+        // The challenge grid alone outgrows a short viewport, so the page
+        // scrolls. No `IntrinsicHeight` here: the shrink-wrapped grid is a
+        // viewport, and viewports can't report intrinsic dimensions — the
+        // button follows the grid rather than being pinned to the bottom.
+        child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: AppDimens.screenH.w),
-          child: SizedBox.expand(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(height: AppDimens.xs.h),
-                Breadcrumb(
-                  label: 'اختر السورة ›',
-                  onTap: () => Navigator.of(context).maybePop(),
-                ),
-                SizedBox(height: AppDimens.sm.h),
-                _SurahHeaderCard(surah: surah, progress: progress),
-                SizedBox(height: AppDimens.xl.h),
-                const SectionHeader.strong(title: 'اختاري تحديًا'),
-                SizedBox(height: AppDimens.sm.h),
-                GridView.count(
-                  crossAxisCount: 2,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  mainAxisSpacing: AppDimens.sm.h,
-                  crossAxisSpacing: AppDimens.sm.w,
-                  childAspectRatio: 0.98,
-                  children: [
-                    for (final t in types)
-                      ChallengeTypeCard(
-                        type: t,
-                        onTap: () => _start(context, t),
-                      ),
-                  ],
-                ),
-                const Spacer(),
-                PrimaryButton(
-                  label: 'ابدأ التحدي الموصى به',
-                  onPressed: () => _start(context, _recommended),
-                ),
-                SizedBox(height: AppDimens.lg.h),
-              ],
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(height: AppDimens.xs.h),
+              Breadcrumb(
+                label: 'اختر السورة ›',
+                onTap: () => Navigator.of(context).maybePop(),
+              ),
+              SizedBox(height: AppDimens.sm.h),
+              _SurahHeaderCard(surah: surah, progress: progress),
+              SizedBox(height: AppDimens.xl.h),
+              const SectionHeader.strong(title: 'اختاري تحديًا'),
+              SizedBox(height: AppDimens.sm.h),
+              GridView.count(
+                crossAxisCount: 2,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                mainAxisSpacing: AppDimens.sm.h,
+                crossAxisSpacing: AppDimens.sm.w,
+                childAspectRatio: 0.98,
+                children: [
+                  for (final t in types)
+                    ChallengeTypeCard(type: t, onTap: () => _start(context, t)),
+                ],
+              ),
+              SizedBox(height: AppDimens.xl.h),
+              PrimaryButton(
+                label: 'ابدأ التحدي الموصى به',
+                onPressed: () => _start(context, _recommended),
+              ),
+              SizedBox(height: AppDimens.lg.h),
+            ],
           ),
         ),
       ),
@@ -113,7 +112,7 @@ class _SurahHeaderCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppDimens.radiusLg.r),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'سورة ${surah.name}',

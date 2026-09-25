@@ -22,8 +22,8 @@ class SpacedRepetition {
       ayahNumber: ayahNumber,
       box: safeBox,
       lastReviewedDay: lastReviewedDay,
-      dueDay: (lastReviewedDay < 0 ? today : lastReviewedDay) +
-          intervals[safeBox],
+      dueDay:
+          (lastReviewedDay < 0 ? today : lastReviewedDay) + intervals[safeBox],
     );
   }
 

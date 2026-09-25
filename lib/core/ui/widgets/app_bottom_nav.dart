@@ -4,19 +4,35 @@ import '../styles/colors.dart';
 import '../styles/dimens.dart';
 import '../styles/text_styles.dart';
 
-/// Label-only bottom navigation from the refreshed exports: a hairline rule,
-/// then a small dot above each label — filled green when active, a hollow grey
-/// ring when not. No Material icons (screens 07/08/09/10/11).
+/// One destination in [AppBottomNav].
+///
+/// [activeIcon] is the filled counterpart of [icon]; the pair reads as one
+/// mark that solidifies on selection rather than two different symbols.
+class AppNavItem {
+  final String label;
+  final IconData icon;
+  final IconData activeIcon;
+
+  const AppNavItem({
+    required this.label,
+    required this.icon,
+    required this.activeIcon,
+  });
+}
+
+/// Bottom navigation from the exports (screens 07/08/09/10/11): a hairline
+/// rule, then an icon over its label — green and filled when active, muted and
+/// outlined when not.
 class AppBottomNav extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
-  final List<String> labels;
+  final List<AppNavItem> items;
 
   const AppBottomNav({
     super.key,
     required this.currentIndex,
     required this.onTap,
-    required this.labels,
+    required this.items,
   });
 
   @override
@@ -32,10 +48,10 @@ class AppBottomNav extends StatelessWidget {
           height: AppDimens.bottomNavHeight.h,
           child: Row(
             children: [
-              for (int i = 0; i < labels.length; i++)
+              for (int i = 0; i < items.length; i++)
                 Expanded(
                   child: _NavItem(
-                    label: labels[i],
+                    item: items[i],
                     selected: i == currentIndex,
                     onTap: () => onTap(i),
                   ),
@@ -49,47 +65,51 @@ class AppBottomNav extends StatelessWidget {
 }
 
 class _NavItem extends StatelessWidget {
-  final String label;
+  final AppNavItem item;
   final bool selected;
   final VoidCallback onTap;
 
   const _NavItem({
-    required this.label,
+    required this.item,
     required this.selected,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final Color tint =
-        selected ? AppColors.primary : AppColors.textSecondary;
+    final Color tint = selected ? AppColors.primary : AppColors.textSecondary;
     return InkWell(
       onTap: onTap,
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: selected ? 9.w : 11.w,
-            height: selected ? 9.w : 11.w,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: selected ? AppColors.primary : Colors.transparent,
-              border: selected
-                  ? null
-                  : Border.all(color: AppColors.borderStrong, width: 1.4),
+      child: Semantics(
+        selected: selected,
+        button: true,
+        child: Center(
+          // Short viewports (landscape, small tablets) leave the bar less
+          // height than the icon + label want; scaling down beats clipping.
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  selected ? item.activeIcon : item.icon,
+                  size: 24.sp,
+                  color: tint,
+                ),
+                SizedBox(height: AppDimens.xxs.h),
+                Text(
+                  item.label,
+                  style: AppTextStyles.navLabel.copyWith(
+                    color: tint,
+                    fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
           ),
-          SizedBox(height: AppDimens.xs.h),
-          Text(
-            label,
-            style: AppTextStyles.navLabel.copyWith(
-              color: tint,
-              fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

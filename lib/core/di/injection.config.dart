@@ -45,10 +45,30 @@ import '../../presentation/auth/bloc/forgot_password_bloc/forgot_password_bloc.d
     as _forgotBloc;
 import '../../data/revision/data_sources/local/revision_local_data_source.dart'
     as _revLocal;
-import '../../domain/revision/repositories/revision_repository.dart' as _revRepo;
+import '../../domain/revision/repositories/revision_repository.dart'
+    as _revRepo;
 import '../../data/revision/repositories/revision_repository_imp.dart'
     as _revRepoImp;
 import '../../presentation/revision/bloc/revision_bloc.dart' as _revBloc;
+import '../../domain/progress/repositories/progress_repository.dart'
+    as _progRepo;
+import '../../data/progress/repositories/progress_repository_imp.dart'
+    as _progRepoImp;
+import '../../presentation/progress/bloc/progress_bloc.dart' as _progBloc;
+import '../../data/profile/data_sources/local/avatar_storage.dart'
+    as _avatarStore;
+import '../../domain/profile/repositories/profile_repository.dart'
+    as _profileRepo;
+import '../../data/profile/repositories/profile_repository_imp.dart'
+    as _profileRepoImp;
+import '../../presentation/profile/bloc/profile_edit_bloc.dart'
+    as _profileEditBloc;
+import '../../domain/memorization/repositories/memorization_repository.dart'
+    as _memoRepo;
+import '../../data/memorization/repositories/memorization_repository_imp.dart'
+    as _memoRepoImp;
+import '../../data/memorization/repositories/memorization_migration.dart'
+    as _memoMigration;
 
 extension GetItInjectableX on _i1.GetIt {
   Future<_i1.GetIt> init({
@@ -105,7 +125,8 @@ extension GetItInjectableX on _i1.GetIt {
       ),
     );
     gh.factory<_loginBloc.LoginBloc>(
-      () => _loginBloc.LoginBloc(authRepository: gh<_authRepo.AuthRepository>()),
+      () =>
+          _loginBloc.LoginBloc(authRepository: gh<_authRepo.AuthRepository>()),
     );
     gh.factory<_registerBloc.RegisterBloc>(
       () => _registerBloc.RegisterBloc(gh<_authRepo.AuthRepository>()),
@@ -126,7 +147,23 @@ extension GetItInjectableX on _i1.GetIt {
       ),
     );
     gh.factory<_onbBloc.OnboardingBloc>(
-      () => _onbBloc.OnboardingBloc(gh<_onbRepo.OnboardingRepository>()),
+      () => _onbBloc.OnboardingBloc(
+        gh<_onbRepo.OnboardingRepository>(),
+        gh<_quranRepo.QuranRepository>(),
+      ),
+    );
+
+    // --- Memorization (ayah-level tracking, shared by reader/profile) ---
+    gh.factory<_memoRepo.MemorizationRepository>(
+      () => _memoRepoImp.MemorizationRepositoryImpl(
+        onboardingRepository: gh<_onbRepo.OnboardingRepository>(),
+      ),
+    );
+    gh.factory<_memoMigration.MemorizationMigration>(
+      () => _memoMigration.MemorizationMigration(
+        localDataSource: gh<_onbLocal.OnboardingLocalDataSource>(),
+        quranRepository: gh<_quranRepo.QuranRepository>(),
+      ),
     );
 
     // --- Quran feature ---
@@ -149,7 +186,10 @@ extension GetItInjectableX on _i1.GetIt {
       ),
     );
     gh.factory<_chalBloc.ChallengeBloc>(
-      () => _chalBloc.ChallengeBloc(gh<_chalRepo.ChallengeRepository>()),
+      () => _chalBloc.ChallengeBloc(
+        gh<_chalRepo.ChallengeRepository>(),
+        gh<_revRepo.RevisionRepository>(),
+      ),
     );
 
     // --- Revision feature ---
@@ -167,6 +207,40 @@ extension GetItInjectableX on _i1.GetIt {
     );
     gh.factory<_revBloc.RevisionBloc>(
       () => _revBloc.RevisionBloc(gh<_revRepo.RevisionRepository>()),
+    );
+
+    // --- Progress feature (home / hifz map / profile) ---
+    gh.factory<_progRepo.ProgressRepository>(
+      () => _progRepoImp.ProgressRepositoryImpl(
+        quranRepository: gh<_quranRepo.QuranRepository>(),
+        onboardingRepository: gh<_onbRepo.OnboardingRepository>(),
+        revisionRepository: gh<_revRepo.RevisionRepository>(),
+        revisionLocalDataSource: gh<_revLocal.RevisionLocalDataSource>(),
+        authPrefUtils: gh<_authPref.AuthPrefUtils>(),
+      ),
+    );
+    gh.factory<_progBloc.ProgressBloc>(
+      () => _progBloc.ProgressBloc(
+        gh<_progRepo.ProgressRepository>(),
+        gh<_revRepo.RevisionRepository>(),
+      ),
+    );
+
+    // --- Profile editing (screen 35) ---
+    gh.factory<_avatarStore.AvatarStorage>(
+      () => _avatarStore.AvatarStorageImpl(),
+    );
+    gh.factory<_profileRepo.ProfileRepository>(
+      () => _profileRepoImp.ProfileRepositoryImpl(
+        prefUtils: gh<_authPref.AuthPrefUtils>(),
+        onboardingRepository: gh<_onbRepo.OnboardingRepository>(),
+        avatarStorage: gh<_avatarStore.AvatarStorage>(),
+      ),
+    );
+    gh.factory<_profileEditBloc.ProfileEditBloc>(
+      () => _profileEditBloc.ProfileEditBloc(
+        gh<_profileRepo.ProfileRepository>(),
+      ),
     );
 
     return this;

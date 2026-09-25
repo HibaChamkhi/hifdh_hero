@@ -7,17 +7,25 @@ import '../../../domain/challenges/models/challenge_question.dart';
 import '../../../domain/challenges/models/challenge_result.dart';
 import '../../../domain/challenges/models/challenge_type.dart';
 import '../../../domain/challenges/repositories/challenge_repository.dart';
+import '../../../domain/revision/repositories/revision_repository.dart';
 
 part 'challenge_event.dart';
 part 'challenge_state.dart';
 
 /// Drives a challenge run: load questions → answer each → score → result.
+///
+/// Every answer is also recorded as a review, so playing a challenge advances
+/// the same spaced-repetition schedule the التقدم tab reads. An ayah the user
+/// has never reviewed is picked up by the schedule the first time a challenge
+/// asks about it.
 @injectable
 class ChallengeBloc extends Bloc<ChallengeEvent, ChallengeState> {
   final ChallengeRepository repository;
+  final RevisionRepository revisionRepository;
   DateTime? _startedAt;
 
-  ChallengeBloc(this.repository) : super(const ChallengeState()) {
+  ChallengeBloc(this.repository, this.revisionRepository)
+    : super(const ChallengeState()) {
     on<ChallengeStarted>(_onStarted);
     on<OptionSelected>(_onSelected);
     on<AnswerSubmitted>(_onSubmitted);
@@ -35,23 +43,29 @@ class ChallengeBloc extends Bloc<ChallengeEvent, ChallengeState> {
         count: event.count,
       );
       if (questions.isEmpty) {
-        emit(const ChallengeState(
-          status: UIStatus.error,
-          message: 'تعذّر توليد أسئلة لهذه السورة',
-        ));
+        emit(
+          const ChallengeState(
+            status: UIStatus.error,
+            message: 'تعذّر توليد أسئلة لهذه السورة',
+          ),
+        );
         return;
       }
       _startedAt = DateTime.now();
-      emit(ChallengeState(
-        status: UIStatus.success,
-        questions: questions,
-        answers: List<int?>.filled(questions.length, null),
-      ));
+      emit(
+        ChallengeState(
+          status: UIStatus.success,
+          questions: questions,
+          answers: List<int?>.filled(questions.length, null),
+        ),
+      );
     } on Exception catch (e) {
-      emit(ChallengeState(
-        status: UIStatus.error,
-        message: mapExceptionToMessage(e),
-      ));
+      emit(
+        ChallengeState(
+          status: UIStatus.error,
+          message: mapExceptionToMessage(e),
+        ),
+      );
     }
   }
 
@@ -62,12 +76,34 @@ class ChallengeBloc extends Bloc<ChallengeEvent, ChallengeState> {
     emit(state.copyWith(answers: answers));
   }
 
-  void _onSubmitted(AnswerSubmitted event, Emitter<ChallengeState> emit) {
-    if (state.selectedIndex == null) return; // an option must be chosen
+  Future<void> _onSubmitted(
+    AnswerSubmitted event,
+    Emitter<ChallengeState> emit,
+  ) async {
+    final selected = state.selectedIndex;
+    if (selected == null) return; // an option must be chosen
+
+    await _recordReview(state.current, selected);
+
     if (state.isLast) {
       emit(state.copyWith(finished: true, result: _score()));
     } else {
       emit(state.copyWith(index: state.index + 1));
+    }
+  }
+
+  /// A failed write must not cost the user their answer, so this never throws
+  /// — the run continues and the schedule simply misses one review.
+  Future<void> _recordReview(ChallengeQuestion? question, int selected) async {
+    if (question == null) return;
+    try {
+      await revisionRepository.recordReview(
+        question.surahNumber,
+        question.ayahNumber,
+        question.isCorrect(selected),
+      );
+    } on Exception {
+      // Intentionally ignored — see above.
     }
   }
 

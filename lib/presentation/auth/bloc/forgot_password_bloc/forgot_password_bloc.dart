@@ -14,8 +14,7 @@ class ForgotPasswordBloc
     extends Bloc<ForgotPasswordEvent, ForgotPasswordState> {
   final AuthRepository authRepository;
 
-  ForgotPasswordBloc(this.authRepository)
-      : super(const ForgotPasswordState()) {
+  ForgotPasswordBloc(this.authRepository) : super(const ForgotPasswordState()) {
     on<ForgotPasswordSubmitted>(_onSubmitted);
   }
 
@@ -28,10 +27,12 @@ class ForgotPasswordBloc
       await authRepository.forgotPassword(event.email);
       emit(state.copyWith(status: UIStatus.success));
     } on Exception catch (e) {
-      emit(state.copyWith(
-        status: UIStatus.error,
-        message: mapExceptionToMessage(e),
-      ));
+      emit(
+        state.copyWith(
+          status: UIStatus.error,
+          message: mapExceptionToMessage(e),
+        ),
+      );
     }
   }
 }

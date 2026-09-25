@@ -34,7 +34,7 @@ class QuestionPromptCard extends StatelessWidget {
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             text,
@@ -46,8 +46,9 @@ class QuestionPromptCard extends StatelessWidget {
             Text(
               subtitle!,
               textAlign: TextAlign.right,
-              style: AppTextStyles.caption
-                  .copyWith(color: AppColors.primaryDark),
+              style: AppTextStyles.caption.copyWith(
+                color: AppColors.primaryDark,
+              ),
             ),
           ],
         ],
@@ -111,10 +112,9 @@ class _DashedBoxPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.2;
     final path = Path()
-      ..addRRect(RRect.fromRectAndRadius(
-        Offset.zero & size,
-        Radius.circular(radius),
-      ));
+      ..addRRect(
+        RRect.fromRectAndRadius(Offset.zero & size, Radius.circular(radius)),
+      );
     const double dash = 7;
     const double gap = 6;
     for (final metric in path.computeMetrics()) {

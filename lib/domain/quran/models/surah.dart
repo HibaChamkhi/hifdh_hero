@@ -27,29 +27,34 @@ class Surah extends Equatable {
 
   /// From `surahs.json` (metadata only).
   factory Surah.meta(Map<String, dynamic> json) => Surah(
-        number: json['number'] as int,
-        name: json['name'] as String,
-        englishName: json['englishName'] as String,
-        revelationType:
-            RevelationType.fromKey(json['revelationType'] as String?),
-        ayahCount: json['ayahCount'] as int,
-        startJuz: (json['startJuz'] as int?) ?? 0,
-      );
+    number: json['number'] as int,
+    name: json['name'] as String,
+    englishName: json['englishName'] as String,
+    revelationType: RevelationType.fromKey(json['revelationType'] as String?),
+    ayahCount: json['ayahCount'] as int,
+    startJuz: (json['startJuz'] as int?) ?? 0,
+  );
 
   /// From `quran.json` (full text).
   factory Surah.full(Map<String, dynamic> json) => Surah(
-        number: json['number'] as int,
-        name: json['name'] as String,
-        englishName: json['englishName'] as String,
-        revelationType:
-            RevelationType.fromKey(json['revelationType'] as String?),
-        ayahCount: json['ayahCount'] as int,
-        ayahs: (json['ayahs'] as List)
-            .map((e) => Ayah.fromJson(e as Map<String, dynamic>))
-            .toList(),
-      );
+    number: json['number'] as int,
+    name: json['name'] as String,
+    englishName: json['englishName'] as String,
+    revelationType: RevelationType.fromKey(json['revelationType'] as String?),
+    ayahCount: json['ayahCount'] as int,
+    ayahs: (json['ayahs'] as List)
+        .map((e) => Ayah.fromJson(e as Map<String, dynamic>))
+        .toList(),
+  );
 
   @override
-  List<Object?> get props =>
-      [number, name, englishName, revelationType, ayahCount, startJuz, ayahs];
+  List<Object?> get props => [
+    number,
+    name,
+    englishName,
+    revelationType,
+    ayahCount,
+    startJuz,
+    ayahs,
+  ];
 }

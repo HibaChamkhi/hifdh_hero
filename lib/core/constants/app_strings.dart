@@ -50,6 +50,54 @@ class AppStrings {
   static const resetLinkSent = 'تم إرسال رابط إعادة التعيين إلى بريدك';
   static const emailHint = 'example@email.com';
 
+  // Home (screen 07)
+  static const greeting = 'السلام عليكم';
+  static const exploredAyahs = 'مستكشفة الآيات';
+  static const streakDays = 'أيام متتالية';
+  static const dayUnit = 'يوم';
+  static const yourJourney = 'رحلة حفظك';
+  static const continueTraining = 'متابعة التدريب';
+
+  // Hifz map (screen 08)
+  static const hifzMap = 'خريطة الحفظ';
+  static const hifzMapSubtitle = 'أكمل كل جزء لفتح التالي';
+
+  // Profile (screen 11)
+  static const profileTitle = 'حسابي';
+  static const xpPoints = 'نقاط الخبرة';
+  static const surahUnit = 'سورة';
+  static const logout = 'تسجيل الخروج';
+
+  // Edit profile (screen 35) + memorized surahs (screen 03)
+  static const editProfile = 'تعديل الملف الشخصي';
+  static const editProfileAction = 'تعديل';
+  static const changePhoto = 'تغيير الصورة';
+  static const chooseFromGallery = 'اختيار من المعرض';
+  static const takePhoto = 'التقاط صورة';
+  static const removePhoto = 'إزالة الصورة';
+  static const saveChanges = 'حفظ التغييرات';
+  static const profileSaved = 'تم حفظ التغييرات';
+  static const nameRequired = 'الرجاء إدخال الاسم';
+  static const photoFailed = 'تعذّر اختيار الصورة';
+  static const searchSurah = 'ابحثي عن سورة...';
+  static const done = 'تم';
+  static const noSurahFound = 'لا توجد سورة بهذا الاسم';
+  static const surahCount = 'سورة محفوظة';
+  static const ayahCount = 'آية محفوظة';
+  static const memorizedOfTotal = 'محفوظة';
+  static const markWholeSurah = 'تحديد السورة كاملة';
+  static const clearWholeSurah = 'إلغاء تحديد السورة';
+  static const overwritePartialTitle = 'تحديد السورة كاملة؟';
+  static const overwritePartialBody =
+      'لديك آيات محددة يدويًا في هذه السورة. تحديد السورة كاملة سيستبدل هذا '
+      'التحديد.';
+  static const cancel = 'إلغاء';
+  static const confirm = 'تأكيد';
+
+  // Reading (surah reader)
+  static const practice = 'تدرّب';
+  static const read = 'اقرأ';
+
   // Errors / states
   static const genericError = 'حدث خطأ غير متوقع';
   static const noConnection = 'لا يوجد اتصال بالإنترنت';

@@ -12,23 +12,15 @@ class PageHeader extends StatelessWidget {
   final String title;
   final String? subtitle;
 
-  const PageHeader({
-    super.key,
-    required this.title,
-    this.subtitle,
-  });
+  const PageHeader({super.key, required this.title, this.subtitle});
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          title,
-          style: AppTextStyles.pageTitle,
-          textAlign: TextAlign.right,
-        ),
+        Text(title, style: AppTextStyles.pageTitle, textAlign: TextAlign.right),
         if (subtitle != null) ...[
           SizedBox(height: AppDimens.xxs.h),
           Text(

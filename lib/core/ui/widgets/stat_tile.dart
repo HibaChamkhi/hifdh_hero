@@ -27,7 +27,8 @@ class StatTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: padding ??
+      padding:
+          padding ??
           EdgeInsets.symmetric(
             horizontal: AppDimens.md.w,
             vertical: AppDimens.lg.h,
@@ -37,15 +38,16 @@ class StatTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppDimens.radiusMd.r),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             value,
             textAlign: TextAlign.right,
             style: AppTextStyles.statNumber.copyWith(
-              fontFamily:
-                  latinValue ? AppTextStyles.latinFont : AppTextStyles.uiFont,
+              fontFamily: latinValue
+                  ? AppTextStyles.latinFont
+                  : AppTextStyles.uiFont,
               fontSize: 24.sp,
               color: valueColor ?? AppColors.textPrimary,
             ),
@@ -78,7 +80,7 @@ class InlineStat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
@@ -90,11 +92,7 @@ class InlineStat extends StatelessWidget {
           ),
         ),
         SizedBox(height: AppDimens.xxs.h),
-        Text(
-          label,
-          textAlign: TextAlign.right,
-          style: AppTextStyles.statLabel,
-        ),
+        Text(label, textAlign: TextAlign.right, style: AppTextStyles.statLabel),
       ],
     );
   }

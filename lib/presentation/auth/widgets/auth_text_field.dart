@@ -27,7 +27,7 @@ class AuthTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: AppTextStyles.label),
         SizedBox(height: AppDimens.xs.h),

@@ -16,7 +16,9 @@ Future<bool?> showAyahReviewSheet(BuildContext context, RevisionItem item) {
     backgroundColor: AppColors.background,
     isScrollControlled: true,
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(AppDimens.radiusXl.r)),
+      borderRadius: BorderRadius.vertical(
+        top: Radius.circular(AppDimens.radiusXl.r),
+      ),
     ),
     builder: (_) => _ReviewSheet(item: item),
   );
@@ -42,8 +44,11 @@ class _ReviewSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('${item.surahName} · آية ${item.ayahNumber}',
-              textAlign: TextAlign.right, style: AppTextStyles.caption),
+          Text(
+            '${item.surahName} · آية ${item.ayahNumber}',
+            textAlign: TextAlign.right,
+            style: AppTextStyles.caption,
+          ),
           SizedBox(height: AppDimens.md.h),
           FutureBuilder<Ayah?>(
             future: _loadAyah(),
@@ -57,19 +62,27 @@ class _ReviewSheet extends StatelessWidget {
               return Container(
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(
-                    horizontal: AppDimens.md.w, vertical: AppDimens.lg.h),
+                  horizontal: AppDimens.md.w,
+                  vertical: AppDimens.lg.h,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.mint,
                   borderRadius: BorderRadius.circular(AppDimens.radiusLg.r),
                 ),
-                child: Text(snap.data!.text,
-                    textAlign: TextAlign.right, style: AppTextStyles.ayah),
+                child: Text(
+                  snap.data!.text,
+                  textAlign: TextAlign.right,
+                  style: AppTextStyles.ayah,
+                ),
               );
             },
           ),
           SizedBox(height: AppDimens.lg.h),
-          Text('هل تذكّرتِها؟',
-              textAlign: TextAlign.right, style: AppTextStyles.bodyStrong),
+          Text(
+            'هل تذكّرتِها؟',
+            textAlign: TextAlign.right,
+            style: AppTextStyles.bodyStrong,
+          ),
           SizedBox(height: AppDimens.sm.h),
           Row(
             children: [
@@ -80,9 +93,12 @@ class _ReviewSheet extends StatelessWidget {
                     minimumSize: Size.fromHeight(52.h),
                     side: const BorderSide(color: AppColors.danger),
                   ),
-                  child: Text('لم أتقنها',
-                      style: AppTextStyles.bodyStrong
-                          .copyWith(color: AppColors.danger)),
+                  child: Text(
+                    'لم أتقنها',
+                    style: AppTextStyles.bodyStrong.copyWith(
+                      color: AppColors.danger,
+                    ),
+                  ),
                 ),
               ),
               SizedBox(width: AppDimens.sm.w),

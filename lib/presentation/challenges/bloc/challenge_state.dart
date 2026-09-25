@@ -53,6 +53,13 @@ class ChallengeState extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [status, message, questions, answers, index, finished, result];
+  List<Object?> get props => [
+    status,
+    message,
+    questions,
+    answers,
+    index,
+    finished,
+    result,
+  ];
 }

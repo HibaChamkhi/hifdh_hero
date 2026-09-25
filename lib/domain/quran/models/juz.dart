@@ -19,13 +19,13 @@ class Juz extends Equatable {
   });
 
   factory Juz.fromJson(Map<String, dynamic> json) => Juz(
-        number: json['number'] as int,
-        name: json['name'] as String,
-        startSurah: json['startSurah'] as int,
-        startAyah: json['startAyah'] as int,
-        endSurah: json['endSurah'] as int,
-        endAyah: json['endAyah'] as int,
-      );
+    number: json['number'] as int,
+    name: json['name'] as String,
+    startSurah: json['startSurah'] as int,
+    startAyah: json['startAyah'] as int,
+    endSurah: json['endSurah'] as int,
+    endAyah: json['endAyah'] as int,
+  );
 
   /// Whether a given (surah, ayah) falls within this juz.
   bool contains(int surah, int ayah) {
@@ -37,6 +37,12 @@ class Juz extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [number, name, startSurah, startAyah, endSurah, endAyah];
+  List<Object?> get props => [
+    number,
+    name,
+    startSurah,
+    startAyah,
+    endSurah,
+    endAyah,
+  ];
 }

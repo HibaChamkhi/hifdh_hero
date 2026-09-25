@@ -7,10 +7,8 @@ class Ayah extends Equatable {
 
   const Ayah({required this.number, required this.text});
 
-  factory Ayah.fromJson(Map<String, dynamic> json) => Ayah(
-        number: json['number'] as int,
-        text: json['text'] as String,
-      );
+  factory Ayah.fromJson(Map<String, dynamic> json) =>
+      Ayah(number: json['number'] as int, text: json['text'] as String);
 
   @override
   List<Object?> get props => [number, text];
