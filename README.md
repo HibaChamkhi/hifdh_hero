@@ -8,16 +8,16 @@ You tell the app which ayahs you already know. It turns them into a daily revisi
 ## Screenshots
 
 <p align="center">
-  <img src="assets/ui-app/07-home.png" width="250" alt="Home screen" />
+  <img src="docs/screenshots/home.png" width="250" alt="Home screen" />
   &nbsp;
-  <img src="assets/ui-app/08-hifz-map.png" width="250" alt="Hifz map" />
+  <img src="docs/screenshots/reader.png" width="250" alt="Quran reader" />
   &nbsp;
-  <img src="assets/ui-app/15-complete-the-ayah.png" width="250" alt="Complete-the-ayah challenge" />
+  <img src="docs/screenshots/challenge.png" width="250" alt="Complete-the-ayah challenge" />
 </p>
 
 <p align="center">
-  <b>Home</b> — streak, ayahs explored and juz progress &nbsp;·&nbsp;
-  <b>Hifz map</b> — the 30 juz as a path &nbsp;·&nbsp;
+  <b>Home</b> — streak, ayahs reviewed and juz progress &nbsp;·&nbsp;
+  <b>Quran reader</b> — mark ayahs as memorized &nbsp;·&nbsp;
   <b>Challenges</b> — أكمل الآية and three other quiz types
 </p>
 

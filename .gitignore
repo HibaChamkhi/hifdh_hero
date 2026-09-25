@@ -46,3 +46,5 @@ app.*.map.json
 
 # Local scratch (transfer archives, pending deletions)
 _to_delete/
+config.bat
+node_modules
